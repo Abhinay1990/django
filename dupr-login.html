@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DUPR Login</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 420px;
+      height: 600px;
+      border: none;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Login with DUPR</h2>
+  <iframe
+    id="dupr-login"
+    src="https://dashboard.dupr.com/login-external-app/Zjc1ZmUzMzktYTQ1My00ZmFjLWY5MjQtZDg1ZjkxYzA4OTE5"
+    allow="clipboard-write"
+  ></iframe>
+
+  <script>
+    function handleMessage(event) {
+      try {
+        const { userToken, refreshToken, email, duprId, id } = event.data;
+
+        if (!userToken || !email) return;
+
+        // Replace this with your app's custom scheme
+        const redirectUri = `pubapp://pubapp.com?dupr_token=${encodeURIComponent(userToken)}&email=${encodeURIComponent(email)}&dupr_id=${encodeURIComponent(duprId)}&dupr_user_id=${encodeURIComponent(id)}`;
+
+        // Redirect to app
+        window.location.href = redirectUri;
+      } catch (err) {
+        console.error("Error parsing DUPR login message:", err);
+      }
+    }
+
+    window.addEventListener("message", handleMessage, false);
+  </script>
+</body>
+</html>
